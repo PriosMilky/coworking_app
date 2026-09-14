@@ -1,0 +1,36 @@
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Uploads (Jangan upload file user ke GitHub)
+app/static/uploads/*
+!app/static/uploads/.gitkeep
+
+# Environment Variables
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

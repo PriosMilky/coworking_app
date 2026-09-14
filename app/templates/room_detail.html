@@ -1,0 +1,236 @@
+{% extends 'base.html' %} {% block content %}
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb" class="mb-4">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a href="{{ url_for('main.index') }}" class="text-decoration-none"
+        >Home</a
+      >
+    </li>
+    <li class="breadcrumb-item">
+      <a href="{{ url_for('main.index') }}#pricing" class="text-decoration-none"
+        >{{ room.kategori }}</a
+      >
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">{{ room.nama }}</li>
+  </ol>
+</nav>
+
+<div class="row">
+  <!-- Kolom Kiri: Gambar -->
+  <div class="col-lg-7 mb-4">
+    <div class="card shadow-sm border-0 overflow-hidden">
+      <!-- Gambar Utama -->
+      <img
+        src="{{ room.gambar_utama }}"
+        class="img-fluid w-100"
+        alt="{{ room.nama }}"
+        style="object-fit: cover; height: 400px"
+      />
+
+      <!-- Thumbnail Gambar -->
+      <div class="card-body bg-light">
+        <div class="d-flex gap-2 justify-content-center">
+          {% for thumb in room.gambar_thumb %}
+          <img
+            src="{{ thumb }}"
+            class="img-thumbnail"
+            style="
+              width: 100px;
+              height: 70px;
+              object-fit: cover;
+              cursor: pointer;
+            "
+            alt="Thumbnail"
+          />
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kolom Kanan: Detail & Harga -->
+  <div class="col-lg-5">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-body p-4 d-flex flex-column">
+        <span class="badge bg-primary align-self-start mb-2"
+          >{{ room.kategori }}</span
+        >
+        <h2 class="fw-bold mb-1">{{ room.nama }}</h2>
+        <p class="text-muted mb-3">
+          <i class="bi bi-people-fill"></i> Kapasitas: {{ room.kapasitas }}
+        </p>
+
+        <hr />
+
+        <h4 class="fw-bold text-primary mb-4">
+          {{ room.harga }}
+          <small class="text-muted fs-6 fw-normal">{{ room.satuan }}</small>
+        </h4>
+
+        <h6 class="fw-bold mb-3">Fasilitas:</h6>
+        <ul class="list-group list-group-flush mb-4">
+          {% for fasilitas in room.fasilitas %}
+          <li class="list-group-item bg-transparent px-0 border-0">
+            <i class="bi bi-check-circle-fill text-success me-2"></i>{{
+            fasilitas }}
+          </li>
+          {% endfor %}
+        </ul>
+
+        <div class="mt-auto">
+          <!-- Tombol ini yang akan memicu Pop-up Modal -->
+          <button
+            type="button"
+            class="btn btn-primary btn-lg w-100 fw-bold"
+            data-bs-toggle="modal"
+            data-bs-target="#bookingModal"
+          >
+            <i class="bi bi-calendar-check"></i> Book Now
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Deskripsi Tambahan -->
+<div class="row mt-4">
+  <div class="col-12">
+    <div class="card shadow-sm border-0">
+      <div class="card-body p-4">
+        <h5 class="fw-bold mb-3">Deskripsi Ruangan</h5>
+        <p class="text-muted">{{ room.deskripsi }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================== -->
+<!-- MODAL / POP-UP FORM PEMESANAN                  -->
+<!-- ============================================== -->
+<div
+  class="modal fade"
+  id="bookingModal"
+  tabindex="-1"
+  aria-labelledby="bookingModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title fw-bold" id="bookingModalLabel">
+          <i class="bi bi-calendar-check"></i> Form Pemesanan: {{ room.nama }}
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body p-4">
+        <form
+          action="{{ url_for('booking.create') }}"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <!-- Input hidden untuk mengirim ID ruangan -->
+          <input type="hidden" name="space_id" value="{{ room.id }}" />
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-bold">Nama Lengkap</label>
+              <input
+                type="text"
+                name="nama_lengkap"
+                class="form-control"
+                placeholder="Masukkan nama lengkap"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-bold">Email</label>
+              <input
+                type="email"
+                name="email"
+                class="form-control"
+                placeholder="Masukkan email aktif"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">No. WhatsApp (Opsional)</label>
+            <input
+              type="text"
+              name="no_whatsapp"
+              class="form-control"
+              placeholder="Contoh: 081234567890"
+            />
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-bold">Tanggal Mulai</label>
+              <input
+                type="date"
+                name="tanggal_mulai"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-bold">Durasi (Jam/Hari)</label>
+              <input
+                type="number"
+                name="durasi"
+                class="form-control"
+                placeholder="Contoh: 3"
+                min="1"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-bold"
+              >Upload Bukti Pembayaran (DP)</label
+            >
+            <div
+              class="border border-2 border-dashed rounded-3 p-4 text-center bg-light"
+              style="border-style: dashed !important; cursor: pointer"
+              onclick="document.getElementById('fileUpload').click()"
+            >
+              <i class="bi bi-cloud-arrow-up fs-1 text-muted"></i>
+              <p class="mb-0 text-muted" id="fileName">
+                Klik untuk upload bukti pembayaran (JPG/PNG/PDF, maks 5MB)
+              </p>
+              <input
+                type="file"
+                name="bukti_pembayaran"
+                class="form-control d-none"
+                id="fileUpload"
+                accept="image/*,.pdf"
+                onchange="
+                  document.getElementById('fileName').innerText =
+                    this.files[0].name
+                "
+              />
+            </div>
+          </div>
+
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary btn-lg fw-bold">
+              <i class="bi bi-send"></i> Kirim Pesanan
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END OF MODAL -->
+
+{% endblock %}
