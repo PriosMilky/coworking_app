@@ -51,7 +51,7 @@ Install dulu di PC kamu:
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/USERNAME/coworking_app.git
+git clone https://github.com/PriosMilky/coworking_app.git
 cd coworking_app
 ```
 
