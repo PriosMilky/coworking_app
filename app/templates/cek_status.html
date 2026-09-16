@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        
+        <!-- Header -->
+        <div class="text-center mb-4">
+            <h1 class="fw-bold text-primary">
+                <i class="bi bi-search"></i> Cek Status Booking
+            </h1>
+            <p class="text-muted">Masukkan kode booking Anda untuk melihat status terkini</p>
+        </div>
+        
+        <!-- Form Input Kode -->
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body p-4">
+                <form method="POST" action="{{ url_for('main.cek_status') }}">
+                    <label class="form-label fw-bold">Kode Booking</label>
+                    <div class="input-group input-group-lg">
+                        <input type="text" name="kode_booking" class="form-control text-uppercase" 
+                               placeholder="Contoh: BKG-2026-A1B2C3" 
+                               value="{{ kode or '' }}" required>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-search"></i> Cek
+                        </button>
+                    </div>
+                    <small class="text-muted">Kode booking dikirim ke email Anda setelah pemesanan.</small>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Hasil Pencarian -->
+        {% if booking %}
+        <div class="card shadow-lg border-0">
+            <!-- Header Status -->
+            <div class="card-header text-white text-center py-4 
+                {% if booking.status == 'pending' %}bg-warning
+                {% elif booking.status == 'sukses' %}bg-success
+                {% else %}bg-danger{% endif %}">
+                
+                {% if booking.status == 'pending' %}
+                    <i class="bi bi-hourglass-split display-4"></i>
+                    <h4 class="fw-bold mt-2 mb-0">Menunggu Verifikasi</h4>
+                    <p class="mb-0 opacity-75">Admin sedang memverifikasi pembayaran Anda</p>
+                {% elif booking.status == 'sukses' %}
+                    <i class="bi bi-check-circle-fill display-4"></i>
+                    <h4 class="fw-bold mt-2 mb-0">Booking Disetujui!</h4>
+                    <p class="mb-0 opacity-75">Pesanan Anda sudah dikonfirmasi</p>
+                {% else %}
+                    <i class="bi bi-x-circle-fill display-4"></i>
+                    <h4 class="fw-bold mt-2 mb-0">Booking Dibatalkan</h4>
+                    <p class="mb-0 opacity-75">Hubungi admin untuk informasi lebih lanjut</p>
+                {% endif %}
+            </div>
+            
+            <div class="card-body p-4">
+                <!-- Kode Booking -->
+                <div class="text-center mb-4">
+                    <small class="text-muted text-uppercase fw-bold">Kode Booking</small>
+                    <h3 class="fw-bold text-primary my-2" style="letter-spacing: 2px;">
+                        {{ booking.kode_booking }}
+                    </h3>
+                </div>
+                
+                <hr>
+                
+                <!-- Detail Pesanan -->
+                <h6 class="fw-bold mb-3"><i class="bi bi-list-check"></i> Detail Pesanan</h6>
+                <table class="table table-borderless table-sm">
+                    <tr>
+                        <td class="text-muted" width="40%">Nama Pemesan</td>
+                        <td class="fw-bold">: {{ booking.nama_lengkap }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Email</td>
+                        <td class="fw-bold">: {{ booking.email }}</td>
+                    </tr>
+                    {% if booking.no_whatsapp %}
+                    <tr>
+                        <td class="text-muted">No. WhatsApp</td>
+                        <td class="fw-bold">: {{ booking.no_whatsapp }}</td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <td class="text-muted">Ruangan</td>
+                        <td class="fw-bold">: {{ booking.space.nama_ruangan }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Tanggal Mulai</td>
+                        <td class="fw-bold">: {{ booking.tanggal_mulai.strftime('%d %B %Y') }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Durasi</td>
+                        <td class="fw-bold">: {{ booking.durasi }} {{ booking.space.durasi_satuan }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Total Harga</td>
+                        <td class="fw-bold text-primary">: Rp {{ "{:,}".format(booking.total_harga).replace(',', '.') }}</td>
+                    </tr>
+                </table>
+                
+                <!-- WiFi Info (kalau sukses) -->
+                {% if booking.status == 'sukses' and booking.wifi_username %}
+                <div class="alert alert-success mt-4">
+                    <h6 class="fw-bold mb-3"><i class="bi bi-wifi"></i> Akses WiFi Anda</h6>
+                    <table class="table table-sm table-borderless mb-0">
+                        <tr>
+                            <td width="40%">Username</td>
+                            <td class="fw-bold">: <code>{{ booking.wifi_username }}</code></td>
+                        </tr>
+                        <tr>
+                            <td>Password</td>
+                            <td class="fw-bold">: <code>{{ booking.wifi_password }}</code></td>
+                        </tr>
+                    </table>
+                </div>
+                {% endif %}
+                
+                <!-- Info Pending -->
+                {% if booking.status == 'pending' %}
+                <div class="alert alert-warning mt-4 small">
+                    <i class="bi bi-info-circle"></i> 
+                    <strong>Catatan:</strong> Admin akan memverifikasi bukti transfer Anda dalam waktu 1x24 jam. 
+                    Anda akan menerima email notifikasi setelah status berubah.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        
+    </div>
+</div>
+{% endblock %}

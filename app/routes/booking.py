@@ -66,15 +66,17 @@ def create():
         # Simpan file
         file.save(os.path.join(upload_folder, filename))
     
-    # 4. Hitung total harga & tanggal selesai
+    # 4. Hitung total harga
     tanggal_mulai = datetime.strptime(tanggal_mulai_str, '%Y-%m-%d').date()
     durasi_int = int(durasi)
     
-    # Asumsi: durasi dalam jam, harga per hari (8 jam = 1 hari harga)
-    # Untuk Co-Working: Rp 100.000/day = 8 jam. Jadi per jam Rp 12.500.
-    # Untuk Meeting Room: Rp 150.000/hour. 
-    # Kita sederhanakan: total_harga = harga_per_hari * durasi (nanti bisa diperbaiki)
-    total_harga = space.harga_per_hari * durasi_int
+    # Hitung total harga berdasarkan tipe durasi
+    if space.durasi_tipe == 'fixed':
+        # Harga sudah fix untuk paket ini
+        total_harga = space.harga_per_hari
+    else:
+        # Harga per jam/hari dikali durasi
+        total_harga = space.harga_per_hari * durasi_int
     
     # 5. Buat booking baru
     booking = Booking(

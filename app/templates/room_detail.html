@@ -182,17 +182,21 @@
               />
             </div>
             <div class="col-md-6 mb-3">
-              <label class="form-label fw-bold">Durasi (Jam/Hari)</label>
-              <input
-                type="number"
-                name="durasi"
-                class="form-control"
-                placeholder="Contoh: 3"
-                min="1"
-                required
-              />
-            </div>
-          </div>
+    <label class="form-label fw-bold">Durasi ({{ room.durasi_satuan }})</label>
+    {% if room.durasi_tipe == 'fixed' %}
+        <input type="number" name="durasi" class="form-control bg-light" 
+               value="{{ room.durasi_default }}" readonly>
+        <small class="text-muted">
+            <i class="bi bi-lock-fill"></i> Durasi sudah tetap sesuai paket
+        </small>
+    {% else %}
+        <input type="number" name="durasi" class="form-control" 
+               placeholder="Contoh: 3" min="1" required>
+        <small class="text-muted">
+            <i class="bi bi-info-circle"></i> Masukkan durasi yang diinginkan
+        </small>
+    {% endif %}
+</div>
 
           <div class="mb-4">
             <label class="form-label fw-bold"

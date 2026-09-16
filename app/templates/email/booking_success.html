@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Berhasil</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; background-color: #f4f6f9;">
+
+    <!-- Wrapper -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f4f6f9; padding: 30px 15px;">
+        <tr>
+            <td align="center">
+                
+                <!-- Container -->
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="max-width: 600px; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+                    
+                    <!-- Header Blue -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); padding: 40px 30px; text-align: center;">
+                            <h1 style="color: #ffffff; font-size: 28px; margin: 0 0 8px 0; letter-spacing: 1px;">CO&CO HUB</h1>
+                            <p style="color: #dbeafe; font-size: 14px; margin: 0;">Coworking Space & Event Venue</p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Success Icon -->
+                    <tr>
+                        <td style="text-align: center; padding: 40px 30px 10px 30px;">
+                            <div style="display: inline-block; width: 80px; height: 80px; background-color: #d1fae5; border-radius: 50%; line-height: 80px; text-align: center;">
+                                <span style="font-size: 40px; color: #10b981;">✓</span>
+                            </div>
+                            <h2 style="color: #111827; font-size: 24px; margin: 20px 0 8px 0;">Pemesanan Berhasil!</h2>
+                            <p style="color: #6b7280; font-size: 15px; margin: 0;">Terima kasih, <strong>{{ booking.nama_lengkap }}</strong>. Pesanan Anda sedang diproses.</p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Kode Booking -->
+                    <tr>
+                        <td style="padding: 30px;">
+                            <div style="background-color: #eff6ff; border: 2px dashed #3b82f6; border-radius: 12px; padding: 25px; text-align: center;">
+                                <p style="color: #1e40af; font-size: 12px; margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">Kode Booking Anda</p>
+                                <p style="color: #1e3a8a; font-size: 28px; margin: 0; font-weight: bold; letter-spacing: 3px;">{{ booking.kode_booking }}</p>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                    <!-- Detail Booking -->
+                    <tr>
+                        <td style="padding: 0 30px 20px 30px;">
+                            <h3 style="color: #111827; font-size: 16px; margin: 0 0 15px 0; border-left: 4px solid #3b82f6; padding-left: 12px;">Detail Pesanan</h3>
+                            
+                            <table cellspacing="0" cellpadding="0" border="0" width="100%" style="border-collapse: collapse;">
+                                <tr>
+                                    <td style="padding: 10px 0; color: #6b7280; font-size: 14px; border-bottom: 1px solid #f3f4f6; width: 40%;">Ruangan</td>
+                                    <td style="padding: 10px 0; color: #111827; font-size: 14px; font-weight: bold; border-bottom: 1px solid #f3f4f6;">{{ booking.space.nama_ruangan }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 0; color: #6b7280; font-size: 14px; border-bottom: 1px solid #f3f4f6;">Tanggal Mulai</td>
+                                    <td style="padding: 10px 0; color: #111827; font-size: 14px; font-weight: bold; border-bottom: 1px solid #f3f4f6;">{{ booking.tanggal_mulai.strftime('%d %B %Y') }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 0; color: #6b7280; font-size: 14px; border-bottom: 1px solid #f3f4f6;">Durasi</td>
+                                    <td style="padding: 10px 0; color: #111827; font-size: 14px; font-weight: bold; border-bottom: 1px solid #f3f4f6;">{{ booking.durasi }} {{ booking.space.durasi_satuan }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 0; color: #6b7280; font-size: 14px; border-bottom: 1px solid #f3f4f6;">Total Harga</td>
+                                    <td style="padding: 10px 0; color: #1e3a8a; font-size: 16px; font-weight: bold; border-bottom: 1px solid #f3f4f6;">Rp {{ "{:,}".format(booking.total_harga).replace(',', '.') }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 10px 0; color: #6b7280; font-size: 14px;">Status</td>
+                                    <td style="padding: 10px 0;">
+                                        <span style="background-color: #fef3c7; color: #92400e; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold;">
+                                            ⏳ MENUNGGU VERIFIKASI
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Tombol Cek Status -->
+                    <tr>
+                        <td style="padding: 10px 30px 30px 30px; text-align: center;">
+                            <a href="{{ url_for('main.cek_status', kode=booking.kode_booking, _external=True) }}" 
+                               style="display: inline-block; background-color: #3b82f6; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 8px; font-weight: bold; font-size: 15px;">
+                                🔍 Cek Status Booking
+                            </a>
+                        </td>
+                    </tr>
+                    
+                    <!-- Info Box -->
+                    <tr>
+                        <td style="padding: 0 30px 30px 30px;">
+                            <div style="background-color: #f0f9ff; border-left: 4px solid #3b82f6; padding: 15px; border-radius: 6px;">
+                                <p style="color: #1e40af; font-size: 13px; margin: 0; line-height: 1.6;">
+                                    <strong>📌 Catatan:</strong> Admin akan memverifikasi bukti pembayaran Anda. 
+                                    Anda akan menerima email notifikasi lagi setelah status berubah menjadi <strong>SUKSES</strong>.
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: #f9fafb; padding: 25px 30px; text-align: center; border-top: 1px solid #e5e7eb;">
+                            <p style="color: #6b7280; font-size: 13px; margin: 0 0 5px 0; font-weight: bold;">CO&CO HUB</p>
+                            <p style="color: #9ca3af; font-size: 12px; margin: 0 0 5px 0;">Jl. Dipati Ukur No.33, Bandung</p>
+                            <p style="color: #9ca3af; font-size: 12px; margin: 0;">📞 0877-2873-0505 | 🌐 conco.id</p>
+                        </td>
+                    </tr>
+                    
+                </table>
+                <!-- End Container -->
+                
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>

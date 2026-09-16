@@ -39,22 +39,31 @@ class Space(db.Model):
     fasilitas = db.Column(db.Text, nullable=True)
     gambar_url = db.Column(db.String(255), nullable=True)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
+    
+    # --- FIELD BARU UNTUK DURASI ---
+    durasi_default = db.Column(db.Integer, nullable=True, default=1)
+    durasi_satuan = db.Column(db.String(20), default='Jam')       # Jam, Hari, Bulan, Tahun
+    durasi_tipe = db.Column(db.String(20), default='flexible')    # 'fixed' atau 'flexible'
+    
     bookings = db.relationship('Booking', backref='space', lazy=True)
 
 class Booking(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    kode_booking = db.Column(db.String(20), unique=True, nullable=False)  # Contoh: BKG-2026-0001
+    kode_booking = db.Column(db.String(20), unique=True, nullable=False)
     nama_lengkap = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(120), nullable=False)
     no_whatsapp = db.Column(db.String(20), nullable=True)
     tanggal_mulai = db.Column(db.Date, nullable=False)
-    durasi = db.Column(db.Integer, nullable=False)  # dalam jam/hari
+    durasi = db.Column(db.Integer, nullable=False)
     total_harga = db.Column(db.Integer, nullable=False)
-    bukti_pembayaran = db.Column(db.String(255), nullable=True)  # nama file
-    status = db.Column(db.String(20), default='pending')  # 'pending', 'sukses', 'batal'
+    bukti_pembayaran = db.Column(db.String(255), nullable=True)
+    status = db.Column(db.String(20), default='pending')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
-    # Relasi (user_id boleh null karena user tidak login)
+    # --- FIELD BARU UNTUK WIFI VOUCHER ---
+    wifi_username = db.Column(db.String(50), nullable=True)
+    wifi_password = db.Column(db.String(50), nullable=True)
+    
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     space_id = db.Column(db.Integer, db.ForeignKey('space.id'), nullable=False)
 

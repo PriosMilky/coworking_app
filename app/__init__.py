@@ -1,14 +1,18 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_mail import Mail
 from config import Config
 import os
 
 db = SQLAlchemy()
 login_manager = LoginManager()
+mail = Mail()
+
 login_manager.login_view = 'auth.login'
 login_manager.login_message = 'Silakan login terlebih dahulu untuk mengakses halaman ini.'
 login_manager.login_message_category = 'warning'
+
 
 def create_app(config_class=Config):
     app = Flask(__name__)
@@ -16,11 +20,10 @@ def create_app(config_class=Config):
 
     db.init_app(app)
     login_manager.init_app(app)
+    mail.init_app(app)
 
-    # Pastikan folder uploads ada
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-    # Daftarkan Blueprint
     from app.routes.main import main_bp
     from app.routes.auth import auth_bp
     from app.routes.admin import admin_bp

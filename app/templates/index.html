@@ -6,7 +6,7 @@
     <div class="container-fluid py-5">
         <h1 class="display-5 fw-bold">Flexible Office Space & Event Venue</h1>
         <p class="col-md-8 fs-4">Private Office, Meeting Room, Coworking Space dan Event Venue untuk bisnis modern di Bandung.</p>
-        <a href="#" class="btn btn-light btn-lg text-primary fw-bold">Get Started</a>
+        <a href="#pricing" class="btn btn-light btn-lg text-primary fw-bold">Get Started</a>
     </div>
 </div>
 
@@ -14,177 +14,49 @@
 <div id="pricing" class="mt-5">
     <h2 class="text-center mb-4 fw-bold">Pricing Plans</h2>
     
-    <!-- Tombol Kategori (Tabs) -->
-    <ul class="nav nav-pills justify-content-center mb-4" id="pricingTabs" role="tablist">
+    <!-- Tabs Kategori -->
+    <ul class="nav nav-pills justify-content-center mb-4 flex-wrap" id="pricingTabs" role="tablist">
+        {% for cat in categories %}
         <li class="nav-item" role="presentation">
-            <button class="nav-link active rounded-pill px-4 mx-1" id="coworking-tab" data-bs-toggle="tab" data-bs-target="#coworking" type="button" role="tab">Co-Working</button>
+            <button class="nav-link {{ 'active' if loop.first else '' }} rounded-pill px-4 mx-1 mb-2" 
+                    id="tab-{{ cat.id }}" data-bs-toggle="tab" data-bs-target="#cat-{{ cat.id }}" 
+                    type="button" role="tab">
+                {{ cat.nama_kategori }}
+            </button>
         </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link rounded-pill px-4 mx-1" id="meeting-tab" data-bs-toggle="tab" data-bs-target="#meeting" type="button" role="tab">Meeting Room</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link rounded-pill px-4 mx-1" id="event-tab" data-bs-toggle="tab" data-bs-target="#event" type="button" role="tab">Event Space</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link rounded-pill px-4 mx-1" id="studio-tab" data-bs-toggle="tab" data-bs-target="#studio" type="button" role="tab">Content Studio</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link rounded-pill px-4 mx-1" id="vo-tab" data-bs-toggle="tab" data-bs-target="#vo" type="button" role="tab">Virtual Office</button>
-        </li>
+        {% endfor %}
     </ul>
 
     <!-- Konten Tab -->
     <div class="tab-content" id="pricingTabsContent">
-        
-        <!-- Tab 1: Co-Working -->
-        <div class="tab-pane fade show active" id="coworking" role="tabpanel">
+        {% for cat in categories %}
+        <div class="tab-pane fade {{ 'show active' if loop.first else '' }}" id="cat-{{ cat.id }}" role="tabpanel">
             <div class="row g-4 justify-content-center">
-                <div class="col-md-3">
+                {% for space in spaces_by_category[cat.nama_kategori] %}
+                <div class="col-md-4 col-lg-3">
                     <div class="card h-100 shadow-sm border-0 text-center p-3">
-                        <h5 class="fw-bold mt-2">Daily Pass</h5>
-                        <h3 class="text-primary my-3">Rp100.000 <small class="text-muted fs-6">/ day</small></h3>
-                        <a href="{{ url_for('main.room_detail', room_id=16) }}" class="btn btn-outline-primary w-100 mt-auto">Pilih Paket</a>
+                        <h5 class="fw-bold mt-2">{{ space.nama_ruangan }}</h5>
+                        <h3 class="text-primary my-3">
+                            Rp {{ "{:,}".format(space.harga_per_hari).replace(',', '.') }}
+                            <small class="text-muted fs-6">/ {{ space.durasi_satuan }}</small>
+                        </h3>
+                        {% if space.durasi_tipe == 'fixed' %}
+                            <small class="text-muted mb-2">
+                                <i class="bi bi-clock"></i> {{ space.durasi_default }} {{ space.durasi_satuan }}
+                            </small>
+                        {% endif %}
+                        <a href="{{ url_for('main.room_detail', room_id=space.id) }}" 
+                           class="btn btn-outline-primary w-100 mt-auto">Pilih Paket</a>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="card h-100 shadow-sm border-0 text-center p-3">
-                        <h5 class="fw-bold mt-2">3 Hours Pass</h5>
-                        <h3 class="text-primary my-3">Rp60.000 <small class="text-muted fs-6">/ 3 hours</small></h3>
-                        <a href="{{ url_for('main.room_detail', room_id=17) }}" class="btn btn-outline-primary w-100 mt-auto">Pilih Paket</a>
-                    </div>
+                {% else %}
+                <div class="col-12 text-center text-muted py-4">
+                    Belum ada paket di kategori ini.
                 </div>
-                <div class="col-md-3">
-                    <div class="card h-100 shadow-sm border-0 text-center p-3">
-                        <h5 class="fw-bold mt-2">Annual Pass</h5>
-                        <h3 class="text-primary my-3">Rp300.000 <small class="text-muted fs-6">/ 4 days</small></h3>
-                        <a href="{{ url_for('main.room_detail', room_id=18) }}" class="btn btn-outline-primary w-100 mt-auto">Pilih Paket</a>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card h-100 shadow-sm border-0 text-center p-3">
-                        <h5 class="fw-bold mt-2">Resident Membership</h5>
-                        <h3 class="text-primary my-3">Rp1.100.000 <small class="text-muted fs-6">/ month</small></h3>
-                        <a href="{{ url_for('main.room_detail', room_id=19) }}" class="btn btn-outline-primary w-100 mt-auto">Pilih Paket</a>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
-
-        <!-- Tab 2: Meeting Room -->
-        <div class="tab-pane fade" id="meeting" role="tabpanel">
-            <div class="row g-4 justify-content-center">
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm border-0 text-center p-3">
-                        <h5 class="fw-bold mt-2">Meeting Room Small</h5>
-                        <h3 class="text-primary my-3">Rp150.000 <small class="text-muted fs-6">/ hour</small></h3>
-                        <a href="{{ url_for('main.room_detail', room_id=1) }}" class="btn btn-outline-primary w-100 mt-auto">Pilih Paket</a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm border-0 text-center p-3">
-                        <h5 class="fw-bold mt-2">Meeting Room Medium</h5>
-                        <h3 class="text-primary my-3">Rp200.000 <small class="text-muted fs-6">/ hour</small></h3>
-                        <a href="{{ url_for('main.room_detail', room_id=2) }}" class="btn btn-outline-primary w-100 mt-auto">Pilih Paket</a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm border-0 text-center p-3">
-                        <h5 class="fw-bold mt-2">Meeting Room Large</h5>
-                        <h3 class="text-primary my-3">Rp300.000 <small class="text-muted fs-6">/ hour</small></h3>
-                        <a href="{{ url_for('main.room_detail', room_id=3) }}" class="btn btn-outline-primary w-100 mt-auto">Pilih Paket</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tab 3: Event Space -->
-        <div class="tab-pane fade" id="event" role="tabpanel">
-            <div class="row g-4 justify-content-center">
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm border-0 text-center p-3">
-                        <h5 class="fw-bold mt-2">Halfday</h5>
-                        <h3 class="text-primary my-3">Rp4.500.000 <small class="text-muted fs-6">/ 4 hours</small></h3>
-                        <a href="{{ url_for('main.room_detail', room_id=7) }}" class="btn btn-outline-primary w-100 mt-auto">Pilih Paket</a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm border-0 text-center p-3">
-                        <h5 class="fw-bold mt-2">Fullday</h5>
-                        <h3 class="text-primary my-3">Rp7.500.000 <small class="text-muted fs-6">/ 8 hours</small></h3>
-                        <a href="{{ url_for('main.room_detail', room_id=8) }}" class="btn btn-outline-primary w-100 mt-auto">Pilih Paket</a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm border-0 text-center p-3">
-                        <h5 class="fw-bold mt-2">Virtual Event</h5>
-                        <h3 class="text-primary my-3">Rp7.000.000</h3>
-                        <a href="{{ url_for('main.room_detail', room_id=9) }}" class="btn btn-outline-primary w-100 mt-auto">Pilih Paket</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tab 4: Content Studio -->
-        <div class="tab-pane fade" id="studio" role="tabpanel">
-            <div class="row g-4 justify-content-center">
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm border-0 text-center p-3">
-                        <h5 class="fw-bold mt-2">IG Live</h5>
-                        <h3 class="text-primary my-3">Rp200.000 <small class="text-muted fs-6">/ hour</small></h3>
-                        <a href="{{ url_for('main.room_detail', room_id=10) }}" class="btn btn-outline-primary w-100 mt-auto">Pilih Paket</a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm border-0 text-center p-3">
-                        <h5 class="fw-bold mt-2">Podcast</h5>
-                        <h3 class="text-primary my-3">Rp450.000 <small class="text-muted fs-6">/ 3 hours</small></h3>
-                        <a href="{{ url_for('main.room_detail', room_id=20) }}" class="btn btn-outline-primary w-100 mt-auto">Pilih Paket</a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm border-0 text-center p-3">
-                        <h5 class="fw-bold mt-2">Webinar</h5>
-                        <h3 class="text-primary my-3">Rp450.000 <small class="text-muted fs-6">/ 3 hours</small></h3>
-                        <a href="{{ url_for('main.room_detail', room_id=11) }}" class="btn btn-outline-primary w-100 mt-auto">Pilih Paket</a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm border-0 text-center p-3">
-                        <h5 class="fw-bold mt-2">Youtube</h5>
-                        <h3 class="text-primary my-3">Rp1.200.000 <small class="text-muted fs-6">/ 3 hours</small></h3>
-                        <a href="{{ url_for('main.room_detail', room_id=12) }}" class="btn btn-outline-primary w-100 mt-auto">Pilih Paket</a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm border-0 text-center p-3">
-                        <h5 class="fw-bold mt-2">Photoshoot / Video Spot</h5>
-                        <h3 class="text-primary my-3">Rp600.000 <small class="text-muted fs-6">/ hour per spot</small></h3>
-                        <a href="{{ url_for('main.room_detail', room_id=13) }}" class="btn btn-outline-primary w-100 mt-auto">Pilih Paket</a>   
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tab 5: Virtual Office -->
-        <div class="tab-pane fade" id="vo" role="tabpanel">
-            <div class="row g-4 justify-content-center">
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm border-0 text-center p-3">
-                        <h5 class="fw-bold mt-2">Virtual Office 1</h5>
-                        <h3 class="text-primary my-3">Rp3.600.000 <small class="text-muted fs-6">/ year</small></h3>
-                        <a href="{{ url_for('main.room_detail', room_id=14) }}" class="btn btn-outline-primary w-100 mt-auto">Pilih Paket</a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm border-0 text-center p-3">
-                        <h5 class="fw-bold mt-2">Virtual Office 2</h5>
-                        <h3 class="text-primary my-3">Rp4.800.000 <small class="text-muted fs-6">/ year</small></h3>
-                        <a href="{{ url_for('main.room_detail', room_id=15) }}" class="btn btn-outline-primary w-100 mt-auto">Pilih Paket</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        {% endfor %}
     </div>
 </div>
 
@@ -202,5 +74,4 @@
         </iframe>
     </div>
 </div>
-
 {% endblock %}
