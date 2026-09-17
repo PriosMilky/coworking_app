@@ -1,90 +1,102 @@
-{% extends 'base.html' %}
-
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 <div class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            
-            <!-- Kartu Sukses -->
-            <div class="card shadow-lg border-0 rounded-4">
-                <div class="card-header bg-success text-white text-center py-4 rounded-top-4">
-                    <i class="bi bi-check-circle-fill display-4"></i>
-                    <h3 class="fw-bold mt-2 mb-0">Pemesanan Berhasil!</h3>
-                    <p class="mb-0 opacity-75">Simpan kode di bawah ini untuk referensi</p>
-                </div>
-                <div class="card-body p-4 text-center">
-                    
-                    <!-- Kode Booking -->
-                    <div class="mb-4">
-                        <small class="text-muted text-uppercase fw-bold">Kode Booking</small>
-                        <h2 class="fw-bold text-primary my-2" style="letter-spacing: 2px;">{{ booking.kode_booking }}</h2>
-                    </div>
-                    
-                    <hr>
-                    
-                    <!-- Detail Booking -->
-                    <div class="text-start mt-4">
-                        <div class="row mb-2">
-                            <div class="col-5 text-muted">Nama</div>
-                            <div class="col-7 fw-bold">: {{ booking.nama_lengkap }}</div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col-5 text-muted">Email</div>
-                            <div class="col-7 fw-bold">: {{ booking.email }}</div>
-                        </div>
-                        {% if booking.no_whatsapp %}
-                        <div class="row mb-2">
-                            <div class="col-5 text-muted">No. WhatsApp</div>
-                            <div class="col-7 fw-bold">: {{ booking.no_whatsapp }}</div>
-                        </div>
-                        {% endif %}
-                        <div class="row mb-2">
-                            <div class="col-5 text-muted">Ruangan</div>
-                            <div class="col-7 fw-bold">: {{ booking.space.nama_ruangan }}</div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col-5 text-muted">Tanggal Mulai</div>
-                            <div class="col-7 fw-bold">: {{ booking.tanggal_mulai.strftime('%d %B %Y') }}</div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col-5 text-muted">Durasi</div>
-                            <div class="col-7 fw-bold">: {{ booking.durasi }} Jam/Hari</div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col-5 text-muted">Total Harga</div>
-                            <div class="col-7 fw-bold text-primary">: Rp {{ "{:,}".format(booking.total_harga).replace(',', '.') }}</div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col-5 text-muted">Status</div>
-                            <div class="col-7">
-                                <span class="badge bg-warning text-dark">
-                                    <i class="bi bi-hourglass-split"></i> {{ booking.status.upper() }}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <hr class="my-4">
-                    
-                    <div class="alert alert-info small text-start">
-                        <i class="bi bi-info-circle"></i>
-                        <strong>Catatan:</strong> Pesanan Anda akan diproses oleh admin. 
-                        Silakan hubungi <strong>0877-2873-0505</strong> untuk konfirmasi lebih lanjut.
-                    </div>
-                    
-                    <!-- Tombol Aksi -->
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
-                        <button onclick="window.print()" class="btn btn-outline-primary">
-                            <i class="bi bi-printer"></i> Print
-                        </button>
-                        <a href="{{ url_for('main.index') }}" class="btn btn-primary">
-                            <i class="bi bi-house"></i> Kembali ke Home
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <!-- Kartu Sukses -->
+      <div class="card shadow-lg border-0 rounded-4">
+        <div
+          class="card-header bg-success text-white text-center py-4 rounded-top-4"
+        >
+          <i class="bi bi-check-circle-fill display-4"></i>
+          <h3 class="fw-bold mt-2 mb-0">Pemesanan Berhasil!</h3>
+          <p class="mb-0 opacity-75">
+            Simpan kode di bawah ini untuk referensi
+          </p>
         </div>
+        <div class="card-body p-4 text-center">
+          <!-- Kode Booking -->
+          <div class="mb-4">
+            <small class="text-muted text-uppercase fw-bold"
+              >Kode Booking</small
+            >
+            <h2 class="fw-bold text-primary my-2" style="letter-spacing: 2px">
+              {{ booking.kode_booking }}
+            </h2>
+          </div>
+
+          <hr />
+
+          <!-- Detail Booking -->
+          <div class="text-start mt-4">
+            <div class="row mb-2">
+              <div class="col-5 text-muted">Nama</div>
+              <div class="col-7 fw-bold">: {{ booking.nama_lengkap }}</div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-5 text-muted">Email</div>
+              <div class="col-7 fw-bold">: {{ booking.email }}</div>
+            </div>
+            {% if booking.no_whatsapp %}
+            <div class="row mb-2">
+              <div class="col-5 text-muted">No. WhatsApp</div>
+              <div class="col-7 fw-bold">: {{ booking.no_whatsapp }}</div>
+            </div>
+            {% endif %}
+            <div class="row mb-2">
+              <div class="col-5 text-muted">Ruangan</div>
+              <div class="col-7 fw-bold">
+                : {{ booking.space.nama_ruangan }}
+              </div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-5 text-muted">Tanggal Mulai</div>
+              <div class="col-7 fw-bold">
+                : {{ booking.tanggal_mulai.strftime('%d %B %Y') }}
+              </div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-5 text-muted">Durasi</div>
+              <div class="col-7 fw-bold">: {{ booking.durasi }} Jam/Hari</div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-5 text-muted">Total Harga</div>
+              <div class="col-7 fw-bold text-primary">
+                : Rp {{ "{:,}".format(booking.total_harga).replace(',', '.') }}
+              </div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-5 text-muted">Status</div>
+              <div class="col-7">
+                <span class="badge bg-warning text-dark">
+                  <i class="bi bi-hourglass-split"></i> {{
+                  booking.status.upper() }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <hr class="my-4" />
+
+          <div class="alert alert-info small text-start">
+            <i class="bi bi-info-circle"></i>
+            <strong>Catatan Penting:</strong> Email konfirmasi telah dikirim ke
+            <strong>{{ booking.email }}</strong>. silakan cek folder <strong>Spam</strong> atau
+            <strong>Promotions</strong> di email Anda. Tandai sebagai
+            <em>"Not Spam"</em> agar email berikutnya masuk ke Inbox.
+          </div>
+
+          <!-- Tombol Aksi -->
+          <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+            <button onclick="window.print()" class="btn btn-outline-primary">
+              <i class="bi bi-printer"></i> Print
+            </button>
+            <a href="{{ url_for('main.index') }}" class="btn btn-primary">
+              <i class="bi bi-house"></i> Kembali ke Home
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 {% endblock %}

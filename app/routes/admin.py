@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 from app import db
 from app.models import User, Booking, Space, Voucher, Category
-from app.emails import kirim_email_status_update, generate_wifi_credentials
+from app.emails import kirim_email_status_update, generate_wifi_credentials, export_to_sheet
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -64,10 +64,16 @@ def update_booking_status(booking_id):
     
     db.session.commit()
     
-    # Kirim email notifikasi kalau status berubah
+        # Kirim email notifikasi kalau status berubah
+        # Kirim email notifikasi & export ke Sheet kalau status berubah
     if old_status != new_status:
         kirim_email_status_update(booking)
-        flash(f'Status pesanan #{booking.id} diubah ke {new_status.upper()} & email terkirim.', 'success')
+        
+        # Export ke Google Sheet HANYA kalau status SUKSES
+        if new_status == 'sukses':
+            export_to_sheet(booking)
+        
+        flash(f'Status pesanan #{booking.id} diubah ke {new_status.upper()}.', 'success')
     else:
         flash(f'Status pesanan #{booking.id} sudah {new_status.upper()}.', 'info')
     
