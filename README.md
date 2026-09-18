@@ -1,189 +1,58 @@
-# 🏢 CO&CO Hub - Coworking Space Booking System
+## 🏢 CO&CO Hub - Coworking Space Booking System
 
-Sistem pemesanan ruangan berbasis web untuk **CO&CO Hub** (Bandung). User bisa pesan ruangan tanpa login, admin mengelola via panel khusus.
+Sistem pemesanan ruangan berbasis web untuk CO&CO Hub (Bandung).
 
----
+## 🚀 Cara Menjalankan Cepat
 
-## ✨ Fitur
+- 1. Clone atau Download Repository:
 
-**User (tanpa login):**
-- Lihat daftar ruangan & harga (Co-Working, Meeting Room, Office, Event, Content Studio, Virtual Office)
-- Detail ruangan + form booking pop-up
-- Upload bukti transfer
-- Dapat kode booking unik (contoh: `BKG-2026-A1B2C3`)
+git clone https://github.com/PriosMilky/coworking_app.git cd coworking_app
 
-**Admin (wajib login):**
-- Dashboard statistik
-- CRUD Pesanan (ubah status: Pending/Sukses/Batal)
-- CRUD Ruangan
-- (Coming soon: Voucher, User, Integrasi Mikrotik)
+- 2. Buat & Aktifkan Virtual Environment:
 
----
+- Windows (CMD):
 
-## 🛠 Teknologi
+python -m venv .venv .venv\Scripts\activate
 
-| Komponen | Versi |
-|---|---|
-| Python | 3.13 |
-| Flask | 2.3.3 |
-| Flask-SQLAlchemy | 3.1.1 |
-| Flask-Login | 0.6.3 |
-| SQLAlchemy | 2.0.52 |
-| Jinja2 | 3.1.6 |
-| Bootstrap | 5.3.0 |
-| Database | SQLite |
+- Windows (Git Bash):
 
-> ⚠️ **Tidak pakai Docker**. Jalankan langsung di Python.
+python -m venv .venv source .venv/Scripts/activate
 
----
+- Linux/Mac:
 
-## 📦 Prasyarat
+python3 -m venv .venv source .venv/bin/activate
 
-Install dulu di PC kamu:
-1. **Python 3.13+** → https://www.python.org/downloads/ (centang **Add Python to PATH**)
-2. **Git** → https://git-scm.com/downloads
-3. **VS Code** (opsional) → https://code.visualstudio.com/
+- 3. Install Dependencies & Jalankan Aplikasi:
 
----
-
-## 🚀 Instalasi
-
-### 1. Clone Repository
-
-```bash
-git clone https://github.com/PriosMilky/coworking_app.git
-cd coworking_app
-```
-
-### 2. Buat Virtual Environment (WAJIB, di PC masing-masing)
-
-**Windows CMD:**
-```bash
-python -m venv .venv
-.venv\Scripts\activate
-```
-
-**Windows Git Bash:**
-```bash
-python -m venv .venv
-source .venv/Scripts/activate
-```
-
-**Linux/Mac:**
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
-
-> 💡 Setelah aktif, akan muncul `(.venv)` di terminal. Kalau tidak muncul, berarti belum aktif.
-
-### 3. Install Dependencies
-
-```bash
 pip install -r requirements.txt
-```
 
----
-
-## ▶️ Cara Menjalankan
-
-```bash
 python run.py
-```
 
-Buka browser:
-- **User:** http://127.0.0.1:5000/
-- **Admin:** http://127.0.0.1:5000/admin/dashboard
+- 4. Buka di Browser:
 
----
+- User: http://127.0.0.1:5000/ [URL 🔗](http://127.0.0.1:5000/?utm_source=gemini)
 
-## 🔑 Akun Admin Default
+Admin: http://127.0.0.1:5000/admin/dashboard (Login: admin@conco.id / admin123) [URL 🔗](http://127.0.0.1:5000/admin/dashboard?utm_source=gemini)
 
-| Field | Value |
-|---|---|
-| Email | `admin@conco.id` |
-| Password | `admin123` |
+📖 Tutorial Singkat
 
-> ⚠️ Ganti password setelah login pertama!
+## 👤 Sisi User (Tanpa Login)
 
----
+- 1. Buka halaman utama aplikasi.
 
-## 📁 Struktur Proyek
+- 2. Pilih kategori ruangan dan klik "Pilih Paket".
 
-```
-coworking_app/
-├── app/
-│   ├── __init__.py          # Init Flask & extensions
-│   ├── models.py            # Tabel database
-│   ├── routes/              # Routing
-│   │   ├── main.py          # User (Home, Detail)
-│   │   ├── auth.py          # Login/Logout
-│   │   ├── admin.py         # Panel admin
-│   │   └── booking.py       # Proses booking
-│   ├── templates/           # HTML (Jinja2)
-│   │   ├── admin/
-│   │   ├── base.html
-│   │   ├── index.html
-│   │   ├── room_detail.html
-│   │   └── voucher.html
-│   └── static/
-│       └── uploads/         # Bukti transfer
-├── config.py
-├── run.py
-├── requirements.txt
-├── .gitignore
-└── README.md
-```
+- 3. Klik "Book Now", isi data diri, dan upload bukti transfer.
 
----
+- 4. Klik "Kirim Pesanan" dan simpan kode booking Anda.
 
-## 🗄️ Cara Menggunakan
+🔐 Sisi Admin
 
-### User Side (Tanpa Login)
 
-1. Buka http://127.0.0.1:5000/
-2. Klik tab kategori (Meeting Room, Event Space, dll)
-3. Klik **"Pilih Paket"** pada ruangan yang diinginkan
-4. Klik tombol **"Book Now"** → form pop-up muncul
-5. Isi: nama, email, tanggal, durasi, upload bukti transfer
-6. Klik **"Kirim Pesanan"** → dapat kode booking
+- 1. Buka halaman admin dan login (admin@conco.id / admin123).
 
-### Admin Side (Wajib Login)
+- 2. Gunakan Dashboard untuk melihat statistik.
 
-1. Buka http://127.0.0.1:5000/admin/dashboard
-2. Login: `admin@conco.id` / `admin123`
-3. **Dashboard:** Lihat statistik
-4. **Kelola Pesanan:** Ubah status pesanan (Pending/Sukses/Batal) atau hapus
-5. **Kelola Ruangan:** Tambah/Edit/Hapus ruangan
+- 3. Gunakan menu Kelola Pesanan untuk mengubah status pesanan (Pending/Sukses/Batal).
 
----
-
-## 🐛 Troubleshooting
-
-**`TemplateNotFound: index.html`**
-→ Pastikan semua file HTML ada di `app/templates/` dan sudah di-save (`Ctrl+S`).
-
-**`ModuleNotFoundError: No module named 'flask'`**
-→ Virtual environment belum aktif. Jalankan `source .venv/Scripts/activate` (Git Bash) atau `.venv\Scripts\activate` (CMD).
-
-**Database error setelah update model**
-→ Hapus file `coworking.db`, lalu `python run.py` ulang. Database akan dibuat ulang otomatis.
-
-**Upload file gagal**
-→ Pastikan folder `app/static/uploads/` sudah ada.
-
----
-
-## 🗺️ Roadmap
-
-- [x] Landing page & detail ruangan
-- [x] Login admin
-- [x] CRUD Pesanan & Ruangan
-- [x] Form booking + upload bukti transfer
-- [ ] Halaman cek status booking untuk user
-- [ ] CRUD Voucher & User
-- [ ] Integrasi Mikrotik RouterOS
-- [ ] Notifikasi Email/WhatsApp
-- [ ] Export laporan Excel/PDF
-
----
+- 4. Gunakan menu Kelola Ruangan untuk menambah atau mengedit ruangan.
