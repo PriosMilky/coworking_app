@@ -150,4 +150,4 @@ if __name__ == '__main__':
         seed_admin()
         seed_dummy_data()
         print("Database siap digunakan!")
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

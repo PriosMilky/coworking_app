@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: coworking_app
+    ports:
+      - "5000:5000"
+    volumes:
+      # Persist uploads folder
+      - ./app/static/uploads:/app/app/static/uploads
+      # Persist database (SQLite)
+      - ./instance:/app/instance
+    env_file:
+      - .env
+    environment:
+      - FLASK_ENV=production
+    restart: unless-stopped
